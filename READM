@@ -1,0 +1,4 @@
+Para executar o algoritmo, basta executar o arquivo main.py com python3. Por padrão o agloritmo utiliza o arquivo 
+'edges' para compor o grafo e o resultado é escrito no console.
+Porém, com poucas mudanças é possível utiliza-lo para receber o grafo de entrada como input de console ou escrever 
+o output num arquivo.
