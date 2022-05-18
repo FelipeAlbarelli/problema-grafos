@@ -1,9 +1,10 @@
 
 # lê arquivo 'edges' e popula grafo implementado com lista de adj
 
-from copyreg import constructor
 
+# classe grafo abstrai funcionalidades do grafo e deixa os algoritmos mais legíveis
 class Grafo():
+
 
     def __init__(self):
         self.grafo_interno = {}
@@ -25,19 +26,6 @@ class Grafo():
             self.vertices =  list([ x for x in self.grafo_interno ])
         return self.vertices
 
-    # def set_cor_vertice(self , vertice , cor):
-    #     self.grafo_interno[vertice]['cor'] = cor
-    
-    # def get_cor_vertice(self, vertice ):
-    #     return self.grafo_interno[vertice]['cor']
-    
-    # def reset_grafo(self):
-    #     for vertice in self.grafo_interno:
-    #         self.set_cor_vertice(vertice, None)
-    
-    def add_distancia(self, vertice, distancia):
-        self.grafo_interno[vertice]['dist'] = distancia
-    
     def __str__(self):
         result = ''
         for vertice in self.grafo_interno:
@@ -51,6 +39,8 @@ with open('edges') as f:
         a,b = line.split()
         grafo.adiciona_vertice(a,b)
 
+# busca em largura clássica para saber a distância de tds os vértices do grafo até o vértice escolhido
+# retorna dicionário com a relação v -> distancia até inicio
 def busca_largura(grafo: Grafo, inicio):
     distancia = {}
     cor = {}
@@ -69,15 +59,20 @@ def busca_largura(grafo: Grafo, inicio):
         cor[u] = 'preto'
     return distancia
 
+# calcula farness em O(E^2 + VE), ao executar busca em largura para cada vértice
+# e somar, para cada v, a distancia de v aos outros vértices.
+# Como a distancia a->b == b->a, é possível diminuir o tempo do algoritmo ao pular do
+#  segundo 'for loop' vértices já visitados no primeiro
 def calcula_farness(grafo: Grafo):
     farness = { x: 0 for x in grafo.get_todos_vertices() }
     for v_i , v in enumerate(grafo.get_todos_vertices()):
-        # print('começando busca em distancia com origem' , v)
         distancia = busca_largura(grafo , v)
         for u in grafo.get_todos_vertices()[v_i + 1:]:
             farness[v] += distancia[u]
             farness[u] += distancia[u]
     return farness
 
+# ordena vértices com base no oposto de farness
+# essa parte pode ser trocada para escrever resultado num .txt ou mandar pela web
 for x , d in sorted(calcula_farness(grafo).items() , key=lambda items: -items[1]  ):
     print(x , d)
