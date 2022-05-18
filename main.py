@@ -12,7 +12,10 @@ class Grafo():
     def adiciona_vertice(self , a,b):
         if not (a in self.grafo_interno):
             self.grafo_interno[a] = {'adj' : []}
+        if not (b in self.grafo_interno):
+            self.grafo_interno[b] = {'adj' : []}
         self.grafo_interno[a]['adj'].append(b)
+        self.grafo_interno[b]['adj'].append(a)
     
     def get_vizinhos(self , a):
         return self.grafo_interno[a]['adj']
@@ -69,6 +72,7 @@ def busca_largura(grafo: Grafo, inicio):
 def calcula_farness(grafo: Grafo):
     farness = { x: 0 for x in grafo.get_todos_vertices() }
     for v_i , v in enumerate(grafo.get_todos_vertices()):
+        # print('começando busca em distancia com origem' , v)
         distancia = busca_largura(grafo , v)
         for u in grafo.get_todos_vertices()[v_i + 1:]:
             farness[v] += distancia[u]
@@ -76,4 +80,4 @@ def calcula_farness(grafo: Grafo):
     return farness
 
 for x , d in sorted(calcula_farness(grafo).items() , key=lambda items: -items[1]  ):
-    print(x , 1/d)
+    print(x , d)
